@@ -1,0 +1,40 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    background-color: #9e9898; /* Light grey color */
+}
+
+header {
+    background-color: #474545; /* Dark grey color */
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    color: white;
+}
+
+aside {
+    background-color: #f1f1f1; /* Light grey color */
+    padding: 20px;
+    margin: 100px;
+    border-radius: 10px;
+}
+
+footer {
+    background-color: #474545; /* Dark grey color */
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
+a{
+    background-color: #474545; /* Dark grey color */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
