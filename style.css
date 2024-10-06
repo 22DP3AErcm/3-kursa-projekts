@@ -30,6 +30,12 @@ footer {
     text-align: center;
 }
 
+nav{
+  text-align: right;
+  margin-top: -90px;
+  margin-bottom: 90px;
+}
+
 a{
     background-color: #474545; /* Dark grey color */
     color: white;
@@ -37,4 +43,30 @@ a{
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    
 }
+
+.star-rating {
+    display: inline-block;
+  }
+  
+  .star {
+    font-size: 24px; /* Adjust the size as needed */
+    color: #ccc; /* Default color for empty stars */
+  }
+  
+  .star.filled {
+    color: #f39c12; /* Color for filled stars */
+  }
+
+  .flex-container > div {
+    background-color: #f1f1f1;
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+
+  .flex-container {
+    display: flex;
+    background-color: #9e9898;
+  }

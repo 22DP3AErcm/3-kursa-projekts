@@ -1,0 +1,124 @@
+
+img {
+    max-width: 100px; /* Set the maximum width */
+    max-height: 100px; /* Set the maximum height */
+    width: auto; /* Maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
+    
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    background-color: #9e9898; /* Light grey color */
+}
+
+header {
+    background-color: #474545; /* Dark grey color */
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    color: white;
+}
+
+aside {
+    background-color: #f1f1f1; /* Light grey color */
+    padding: 20px;
+    margin: 100px;
+    border-radius: 10px;
+}
+
+footer {
+    background-color: #474545; /* Dark grey color */
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
+nav{
+  text-align: right;
+  margin-top: -90px;
+  margin-bottom: 90px;
+}
+
+a{
+  background-color: #474545; /* Dark grey color */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  .flex-container > div {
+    background-color: #f1f1f1;
+    margin: 20px;
+    padding: 40px;
+    font-size: 17px;
+    height: 150px;
+    width: 300px;
+  }
+
+.flex-item:hover {
+    background-color: #aa8989;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transform: scale(1.1);
+    transition: width 1s, height 1s, transform 1s;
+}
+
+.move-up {
+    float: right;
+    margin-top: -90px;
+}
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color:  #474545;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+  color: white;
+  margin-top: 10px;
+  min-height: 100px;
+  left: -70px;
+  text-align: left;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  display: block;
+}
+
+@media only screen and (max-width: 1200px) {
+
+  .flex-container > div {
+    background-color: #f1f1f1;
+    margin: 20px;
+    padding: 40px;
+    font-size: 17px;
+    height: 150px;
+    width: 300px;
+  }
+  
+  .flex-container {
+    flex-direction: column;
+  }
+}
