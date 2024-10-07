@@ -7,28 +7,35 @@
     <link rel="stylesheet" href="Contcat.css">
 </head>
 <body>
-    <header><h1>Contact Information</h1></header>
-    <nav>
-        <p></p>
-        <a href="index.html">Home</a>
-        <a href="About.html">About</a>
-        <a href="Contact.html">Contact</a>
-        <div class="dropdown">
-            <a>Services</a>
+    <header>
+        <h1>Contact Information</h1>
+    </header>
+    <nav class="navigation">
+        <br>
+        <div class="hamburger" onclick="toggleMenu()">
+            &#9776;
+        </div>
+        <div id="myLinks">
+            <a href="index.html">Home</a>
+            <a href="About.html">About</a>
+            <div class="dropdown">
+                <a>Services</a>
                 <div class="dropdown-content">
                     <a href="">Link1</a>
                     <a href="">link2</a>
                     <a href="">Link3</a>
                 </div>
-          </div>
+            </div>
+        </div>
     </nav>
+
     <br>
     <div class="flex-container">
         <div class="flex-item">
             <div class="text-container">
                 <h2>PC fan</h2>
                 <p>Skaists datora fēns</p>
-                <a href="">Learn more</a>
+                <a id="Fens1" class="MODALB">Learn more</a>
             </div>
             <img src="Fan.png" alt="igaming" class="image move-up">
         </div>
@@ -36,7 +43,7 @@
                 <div class="text-container">
                 <h2>GPU</h2>
                 <p>Graphics processing unit</p>
-                <a href="">Learn more</a>
+                <a id="GPU1" class="MODALB">Learn more</a>
             </div>
             <img src="GPU.png" alt="igaming" class="image move-up"></div>
         <div class="flex-item">
@@ -44,10 +51,78 @@
                 <div class="text-container">
                 <h2>CPU</h2>
                 <p>Central processing unit</p>
-                <a href="">Learn more</a>
+                <a id="CPU1" class="MODALB">Learn more</a>
             </div>
             <img src="CPU.png" alt="igaming" class="image move-up"></div>
         </div>
     </div>
+    <div id="Fens1.1" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Reizēm tavam datoram ir pārāk karsts tāpēc viņam ir nepieciešam atvēsināties. Viens no veidiem kā to var izdarīt ir izmantot fēnu.</p>
+        </div> 
+    </div>
+    <div id="GPU1.1" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Grafikas karte uztaisa visu tev skaistu un glītu uz tava ekrāne.</p>
+        </div> 
+    </div>
+    <div id="CPU1.1" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>CPU wow</p>
+        </div> 
+    </div>
+
+
+<script>
+    var buttons = document.getElementsByClassName("MODALB");
+
+    for (var i = 0; i < 3; i++) {
+        buttons[i].onclick = function() {
+            
+            var modalId = this.id + ".1";
+            var modal = document.getElementById(modalId);
+
+            modal.style.display = "block";
+
+            var span = modal.getElementsByClassName("close")[0];
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function toggleMenu() {
+        var myLinks = document.getElementById("myLinks");
+        if (myLinks.style.display === "flex") {
+            myLinks.style.display = "none";
+        } else {
+            myLinks.style.display = "flex";
+        }
+    }
+
+    window.addEventListener('resize', function() {
+        var myLinks = document.getElementById("myLinks");
+        if (window.innerWidth > 1201) {
+            myLinks.style.display = "flex";
+        } else {
+            myLinks.style.display = "none";
+        }
+    });
+
+</script>
+
+
 </body>
 </html>

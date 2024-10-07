@@ -5,11 +5,11 @@ html, body {
 }
 
 body {
-    background-color: #9e9898; /* Light grey color */
+    background-color: #9e9898;
 }
 
 header {
-    background-color: #474545; /* Dark grey color */
+    background-color: #474545;
     padding: 20px;
     box-sizing: border-box;
     width: 100%;
@@ -17,14 +17,14 @@ header {
 }
 
 aside {
-    background-color: #f1f1f1; /* Light grey color */
+    background-color: #f1f1f1;
     padding: 20px;
     margin: 100px;
     border-radius: 10px;
 }
 
 footer {
-    background-color: #474545; /* Dark grey color */
+    background-color: #474545; 
     padding: 10px;
     color: white;
     text-align: center;
@@ -37,36 +37,14 @@ nav{
 }
 
 a{
-    background-color: #474545; /* Dark grey color */
+    background-color: #474545;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    
+    cursor: pointer;   
 }
 
-.star-rating {
-    display: inline-block;
-  }
-  
-  .star {
-    font-size: 24px; /* Adjust the size as needed */
-    color: #ccc; /* Default color for empty stars */
-  }
-  
-  .star.filled {
-    color: #f39c12; /* Color for filled stars */
-  }
-
-  .flex-container > div {
-    background-color: #f1f1f1;
-    margin: 10px;
-    padding: 20px;
-    font-size: 30px;
-  }
-
-  .flex-container {
-    display: flex;
-    background-color: #9e9898;
-  }
+a:hover{
+    background-color: #6b6969; /* Dark red color */
+}
