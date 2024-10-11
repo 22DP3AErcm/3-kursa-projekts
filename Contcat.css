@@ -175,17 +175,17 @@ a:hover{
   }
 
   #myLinks {
-    display: none; /* Hide by default */
+    display: none;
     flex-direction: column;
     position: absolute;
-    top: 125px; /* Adjust based on header height */
+    top: 120px;
     width: 100%;
-    background-color: white; /* Adjust as needed */
+    background-color: #474545;
     z-index: 1;
   }
 
   #myLinks a {
-    display: block; /* Make links behave like block elements */
+    display: block;
     padding: 10px;
     text-align: center;
     align-items: flex-start;
@@ -216,7 +216,7 @@ a:hover{
   }
 
   a {
-    background-color: #474545; /* Dark grey color */
+    background-color: #474545;
     color: rgb(241, 241, 241);
     padding: 10px;
     border: none;
@@ -225,7 +225,7 @@ a:hover{
   }
 
   a:hover {
-    background-color: #6b6969; /* Dark red color */
+    background-color: #6b6969;
   }
 
   .flex-container > div {
