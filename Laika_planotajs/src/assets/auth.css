@@ -2,9 +2,10 @@
     max-width: 400px;
     margin: 100px auto;
     padding: 20px;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #363535;
+    box-shadow: 0 2px 4px rgba(253, 253, 253, 0.1);
     border-radius: 8px;
+    color: white;
   }
   
   .form-group {
@@ -20,12 +21,14 @@
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    background-color: #525252;
+    color: white;
   }
   
   .btn {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #000000;
     color: white;
     border: none;
     border-radius: 5px;
@@ -33,5 +36,10 @@
   }
   
   .btn:hover {
-    background-color: #45a049;
+    background-color: #1d1d1d;
+  }
+
+  a {
+    color: #0786ee;
+    text-decoration: none;
   }
