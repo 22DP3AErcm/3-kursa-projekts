@@ -4,7 +4,7 @@
     <div class="card-container">
       <div class="card">
         <div class="card-header">
-          <h1>Plan Your Day!</h1>
+          <h1>Plan Your Day</h1>
         </div>
         <p>Organize your daily tasks and stay productive.</p>
         <button class="start-button">Start</button>

@@ -2,7 +2,18 @@
   <div id="app">
     <header>
       <div class="header-right">
-        <RouterLink to="/login" class="nav-button">Login</RouterLink>
+        <template v-if="user && user.name">
+          <div class="dropdown">
+            <button class="nav-button">{{ user.name }}</button>
+            <div class="dropdown-content">
+              <RouterLink to="/settings" class="dropdown-item">Settings</RouterLink>
+              <button @click="logout" class="dropdown-item">Log Out</button>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <RouterLink to="/login" class="nav-button">Login</RouterLink>
+        </template>
       </div>
       <nav>
         <RouterLink to="/" class="nav-button">Home</RouterLink>
@@ -16,16 +27,24 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import '@/assets/styles.css'
-</script>
+import { RouterLink, RouterView, useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import '@/assets/styles.css';
 
-<script>
-export default {
-  metaInfo: {
-    meta: [
-      { name: 'csrf-token', content: '{{ csrf_token() }}' }
-    ]
+const router = useRouter();
+const user = ref(JSON.parse(localStorage.getItem('user')) || null);
+
+const logout = async () => {
+  user.value = null;
+  localStorage.removeItem('user');
+  await router.push('/login');
+  window.location.reload();
+};
+
+onMounted(() => {
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  if (storedUser) {
+    user.value = storedUser;
   }
-}
+});
 </script>
