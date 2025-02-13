@@ -7,9 +7,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log; // Import the Log facade
 
 class RegisterController extends Controller
 {
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -27,6 +33,9 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Log the success message
+        Log::info('User registered successfully', ['user_id' => $user->id, 'email' => $user->email]);
 
         return response()->json(['message' => 'Registration successful'], 201);
     }

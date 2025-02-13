@@ -1,5 +1,6 @@
 import '../css/app.css';
 import './bootstrap';
+import $ from 'jquery';
 
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -24,4 +25,10 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+});
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });

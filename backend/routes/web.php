@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use Inertia\Inertia;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Session;
 
 Route::middleware(['web'])->group(function () {
     Route::get('/', function () {
@@ -33,4 +34,8 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
+
+    Route::get('/csrf-token', function () {
+        return response()->json(['csrfToken' => csrf_token()]);
+    });
 });

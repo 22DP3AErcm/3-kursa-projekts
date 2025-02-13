@@ -43,15 +43,7 @@ const password = ref('');
 const confirmPassword = ref('');
 const router = useRouter();
 
-const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '';
-
 const register = async () => {
-  if (!csrfToken) {
-    alert('CSRF token not found');
-    return;
-  }
-
   try {
     const response = await axios.post('/register', {
       email: email.value,
@@ -59,10 +51,6 @@ const register = async () => {
       telephone: telephone.value,
       password: password.value,
       password_confirmation: confirmPassword.value,
-    }, {
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      }
     });
     alert(response.data.message);
     router.push('/login');

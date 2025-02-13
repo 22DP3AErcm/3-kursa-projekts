@@ -10,9 +10,9 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(config => {
-    const token = document.head.querySelector('meta[name="csrf-token"]');
-    if (token) {
-        config.headers['X-CSRF-TOKEN'] = token.content;
+    const tokenElement = document.head.querySelector('meta[name="csrf-token"]');
+    if (tokenElement) {
+        config.headers['X-CSRF-TOKEN'] = tokenElement.getAttribute('content');
     }
     return config;
 }, error => {

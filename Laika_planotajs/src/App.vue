@@ -19,3 +19,13 @@
 import { RouterLink, RouterView } from 'vue-router'
 import '@/assets/styles.css'
 </script>
+
+<script>
+export default {
+  metaInfo: {
+    meta: [
+      { name: 'csrf-token', content: '{{ csrf_token() }}' }
+    ]
+  }
+}
+</script>
