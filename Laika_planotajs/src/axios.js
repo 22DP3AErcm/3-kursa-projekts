@@ -7,16 +7,12 @@ const axiosInstance = axios.create({
         'Accept': 'application/json',
     },
     withCredentials: true, // Ensure credentials are included
+    withXSRFToken: true, // Ensure the XSRF-TOKEN is sent
 });
 
-axiosInstance.interceptors.request.use(config => {
-    const tokenElement = document.head.querySelector('meta[name="csrf-token"]');
-    if (tokenElement) {
-        config.headers['X-CSRF-TOKEN'] = tokenElement.getAttribute('content');
-    }
+axios.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
     return config;
-}, error => {
-    return Promise.reject(error);
 });
 
 export default axiosInstance;

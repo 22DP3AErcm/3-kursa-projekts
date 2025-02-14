@@ -4,22 +4,8 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="">
     <title>Vite App</title>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Fetch the CSRF token from the server and set it in the meta tag
-        fetch('http://127.0.0.1:8000/csrf-token', {
-          credentials: 'include'
-          
-        })
-          .then(response => response.json())
-          .then(data => {
-            document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrfToken);
-          })
-          .catch(error => console.error('Error fetching CSRF token:', error));
-      });
-    </script>
+    
   </head>
   <body>
     <div id="app"></div>

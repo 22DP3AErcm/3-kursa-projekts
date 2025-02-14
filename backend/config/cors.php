@@ -1,24 +1,34 @@
 <?php
-// filepath: /c:/Users/ercma/Documents/Trader/3-kursa-projekts/backend/config/cors.php
+
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | Laravel CORS Options
+    | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
     |
-    | The allowed_origins, allowed_headers and allowed_methods options are
-    | set to accept all by default. You can adjust them as needed.
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'register', 'login', 'csrf-token'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:5173', 'http://localhost:5174'],
+
+    'allowed_origins' => ['*'],
+
     'allowed_origins_patterns' => [],
+
     'allowed_headers' => ['*'],
+
     'exposed_headers' => [],
+
     'max_age' => 0,
+
     'supports_credentials' => true,
 
 ];

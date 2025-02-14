@@ -45,14 +45,14 @@ const router = useRouter();
 
 const register = async () => {
   try {
-    const response = await axios.post('/register', {
+    const response = await axios.post('/api/register', {
       email: email.value,
       name: name.value,
       telephone: telephone.value,
       password: password.value,
       password_confirmation: confirmPassword.value,
     });
-    alert(response.data.message);
+    alert('Registration successful! Please log in.');
     router.push('/login');
   } catch (error) {
     console.error(error.response?.data || error.message);

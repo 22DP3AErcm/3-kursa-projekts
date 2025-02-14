@@ -2,7 +2,6 @@
   <div class="auth-container">
     <h1>Login</h1>
     <form @submit.prevent="login">
-      <input type="hidden" name="_token" :value="csrfToken">
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email" required>
@@ -28,19 +27,14 @@ import { user } from '@/store';
 
 const email = ref('');
 const password = ref('');
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const router = useRouter();
 
 const login = async () => {
   try {
-    const response = await axios.post('/login', { 
+    const response = await axios.post('/api/login', { 
       email: email.value,
       password: password.value,
-    }, {
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      }
-    });
+    },);
     
     alert(response.data.message);
     user.value = response.data.user;
