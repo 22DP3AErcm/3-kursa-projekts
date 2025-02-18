@@ -1,0 +1,27 @@
+/* Make the calendar background brighter */
+.vuecal {
+    background-color: #49494b; 
+}
+  
+/* Make the event titles stand out */
+.vuecal__event {
+    color: #000000;
+    font-weight: bold;
+}
+  
+/* Highlight the current day */
+.vuecal__cell--today {
+    background-color: #747470; 
+    color: #ffffff;
+  }
+  
+/* Customize the header */
+.vuecal__header {
+    background-color: #2680ca;
+    color: #000000; 
+}
+
+.fixed-size-calendar {
+    width: 800px;
+    height: 600px; 
+}
