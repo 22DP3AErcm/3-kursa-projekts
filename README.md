@@ -8,7 +8,7 @@ Izdarītais:
 Login, register, logout pabeigts
 Home page iesākts projekta laikā plānots ka vēl mainīsies
 Navigation bar iesākts vēl mainīsies
-Kalendārs iesākts, bet laikam taisīšu neizmantojot vue-cal frameworku
+Kalendārs iesākts nezimantojot framwork jauztaisa laravel backends lai saglaba jaunus eventus un jasalabo dizains
 Projektu plānotājs nav sākts
 Finanšu sekošanai lapa nav sākta
 Iestatijumi nav sākti

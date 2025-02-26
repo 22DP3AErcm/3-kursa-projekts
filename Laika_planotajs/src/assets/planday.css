@@ -1,27 +1,84 @@
-/* Make the calendar background brighter */
-.vuecal {
-    background-color: #49494b; 
-}
-  
-/* Make the event titles stand out */
-.vuecal__event {
-    color: #000000;
-    font-weight: bold;
-}
-  
-/* Highlight the current day */
-.vuecal__cell--today {
-    background-color: #747470; 
-    color: #ffffff;
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff; /* White background to stand out */
+    padding: 40px; /* Increase padding */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 1200px; /* Increase the max width */
+    margin: 60px auto; /* Center the calendar */
   }
-  
-/* Customize the header */
-.vuecal__header {
-    background-color: #2680ca;
-    color: #000000; 
-}
-
-.fixed-size-calendar {
-    width: 800px;
-    height: 600px; 
-}
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px; /* Increase bottom margin */
+  }
+  .calendar-header span {
+    font-size: 1.5em; /* Increase font size */
+    font-weight: bold; /* Make text bold */
+  }
+  .calendar-header button {
+    padding: 10px 20px; /* Add padding */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #007bff; /* Blue background */
+    color: #fff; /* White text */
+    font-size: 1em; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  .calendar-header button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  .calendar-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .calendar-weekdays, .calendar-days {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .calendar-weekdays div, .calendar-days button {
+    width: calc(100% / 7);
+    text-align: center;
+    padding: 20px; /* Increase padding */
+    font-size: 1.5em; /* Increase font size */
+    height: 60px; /* Increase height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f0f0f0; /* Light grey background */
+    color: #000; /* Black text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  .calendar-days button:hover {
+    background-color: #d0d0d0; /* Darker grey on hover */
+  }
+  .current-day {
+    background-color: #ffeb3b; /* Highlight current day with a yellow background */
+    border-radius: 50%;
+    color: #000; /* Black text for contrast */
+  }
+  .sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
