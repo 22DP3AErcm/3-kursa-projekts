@@ -8,7 +8,7 @@ Izdarītais:
 Login, register, logout pabeigts
 Home page iesākts projekta laikā plānots ka vēl mainīsies
 Navigation bar iesākts vēl mainīsies
-Kalendārs iesākts nezimantojot framwork jauztaisa laravel backends lai saglaba jaunus eventus un jasalabo dizains
+Kalendārs iesākts saglaba datus backenda bet ir jauztaisa atgadinajumu sistema un jasalabo dizains
 Projektu plānotājs nav sākts
 Finanšu sekošanai lapa nav sākta
 Iestatijumi nav sākti

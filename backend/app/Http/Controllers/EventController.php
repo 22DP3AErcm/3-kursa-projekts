@@ -18,7 +18,7 @@ class EventController extends Controller
     {
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:50',
             'start_time' => 'required|date',
             'end_time' => 'required|date',
             'description' => 'required|string|max:255',
@@ -31,7 +31,7 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:50',
             'start_time' => 'required|date',
             'end_time' => 'required|date',
             'description' => 'required|string|max:255',
