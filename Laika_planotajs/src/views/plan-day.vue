@@ -17,7 +17,15 @@
         </div>
       </div>
     </div>
-    <Sidebar :isOpen="isSidebarOpen" :selectedDate="selectedDate" :events="events" @close="closeSidebar" @add-event="addEvent" @update-event="updateEvent" />
+    <Sidebar 
+      :isOpen="isSidebarOpen" 
+      :selectedDate="selectedDate" 
+      :events="events" 
+      @close="closeSidebar" 
+      @add-event="addEvent" 
+      @update-event="updateEvent"
+      @delete-event="deleteEvent" 
+    />
   </div>
 </template>
 
@@ -83,48 +91,169 @@ export default {
              date.getMonth() === today.getMonth() &&
              date.getFullYear() === today.getFullYear();
     },
-    openSidebar(date) {
+    async openSidebar(date) {
       if (date) {
-        this.selectedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-        this.fetchEvents(date);
+        // Format with proper leading zeros
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+        const day = date.getDate().toString().padStart(2, '0');
+        
+        this.selectedDate = `${year}-${month}-${day}`;
+        console.log("Opening sidebar with date:", this.selectedDate);
+        await this.fetchEvents(date);
         this.isSidebarOpen = true;
       }
     },
     closeSidebar() {
       this.isSidebarOpen = false;
     },
-    fetchEvents(date) {
-      axios.get('/api/events', {
-        params: {
-          date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    async fetchEvents(date) {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      // Format date consistently
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      console.log("Fetching events for date:", formattedDate);
+      
+      try {
+        const response = await axios.get(`http://localhost:8000/api/events?date=${formattedDate}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        this.events = response.data;
+        console.log('Fetched Events:', this.events);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    },
+    addEvent(event) {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!token || !user) {
+        console.error('No token or user found');
+        return;
+      }
+
+      const formattedDate = this.selectedDate;
+      console.log("Using date for new event:", formattedDate);
+      
+      const eventData = {
+        user_id: user.id,
+        title: event.title,
+        description: event.description || '',
+        start_time: `${formattedDate} ${event.start_time}`,
+        end_time: `${formattedDate} ${event.end_time}`
+      };
+      
+      console.log("Sending new event with data:", eventData);
+      
+      axios.post('http://localhost:8000/api/events', eventData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
       })
       .then(response => {
-        this.events = response.data;
-      })
-      .catch(error => {
-        console.error('Error fetching events:', error);
-      });
-    },
-    addEvent(event) {
-      axios.post('/api/events', event)
-      .then(response => {
+        console.log('Event Added:', response.data);
         this.events.push(response.data);
       })
       .catch(error => {
         console.error('Error adding event:', error);
+        if (error.response) {
+          console.error('Server response:', error.response.data);
+        }
+      });
+    },
+    deleteEvent(event) {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      
+      // Remove from local array
+      this.events = this.events.filter(e => e.id !== event.id);
+      
+      // Delete from API/backend with proper URL and auth headers
+      axios.delete(`http://localhost:8000/api/events/${event.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(() => {
+        console.log('Event deleted successfully');
+      })
+      .catch(error => {
+        console.error('Error deleting event:', error);
+        // Reload events in case of error to restore state
+        this.fetchEvents(new Date(this.selectedDate));
       });
     },
     updateEvent(updatedEvent) {
-      axios.put(`/api/events/${updatedEvent.id}`, updatedEvent)
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      
+      // Extract the original date from the event's start_time
+      // Use today's date as default fallback
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');
+      const day = today.getDate().toString().padStart(2, '0');
+      let originalDatePart = `${year}-${month}-${day}`; // Today's date as default
+      
+      // Get the date part from the original event start_time
+      if (updatedEvent.start_time && updatedEvent.start_time.includes(' ')) {
+        originalDatePart = updatedEvent.start_time.split(' ')[0];
+      }
+
+      // Create event data using the ORIGINAL date (not the selected date)
+      const eventData = {
+        id: updatedEvent.id,
+        title: updatedEvent.title,
+        description: updatedEvent.description || '',
+        // Use the original date with the updated time
+        start_time: `${originalDatePart} ${updatedEvent.start_time.includes(' ') ? 
+                      updatedEvent.start_time.split(' ')[1] : updatedEvent.start_time}`,
+        end_time: `${originalDatePart} ${updatedEvent.end_time.includes(' ') ? 
+                    updatedEvent.end_time.split(' ')[1] : updatedEvent.end_time}`,
+        user_id: updatedEvent.user_id
+      };
+
+      console.log('Sending update with data:', eventData);
+      
+      axios.put(`http://localhost:8000/api/events/${updatedEvent.id}`, eventData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(response => {
+        console.log('Event Updated:', response.data);
+        // Update the local events array
         const index = this.events.findIndex(event => event.id === updatedEvent.id);
         if (index !== -1) {
           this.events.splice(index, 1, response.data);
         }
+        
+        // Make sure the updated event appears in the current view
+        if (!this.events.some(e => e.id === response.data.id)) {
+          this.events.push(response.data);
+        }
       })
       .catch(error => {
         console.error('Error updating event:', error);
+        if (error.response) {
+          console.error('Server response:', error.response.data);
+        }
       });
     }
   }

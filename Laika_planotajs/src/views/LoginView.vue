@@ -34,11 +34,12 @@ const login = async () => {
     const response = await axios.post('/api/login', { 
       email: email.value,
       password: password.value,
-    },);
+    });
     
     alert(response.data.message);
     user.value = response.data.user;
     localStorage.setItem('user', JSON.stringify(response.data.user));
+    localStorage.setItem('token', response.data.token);
     await router.push('/');
     window.location.reload();
   } catch (error) {

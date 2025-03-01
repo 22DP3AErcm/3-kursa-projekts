@@ -1,0 +1,388 @@
+.sidebar {
+    position: fixed;
+    top: 60px;
+    right: -400px;
+    height: calc(100vh - 60px); 
+    background-color: white;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+  
+  .sidebar.open {
+    right: 0;
+  }
+  
+  /* Update sidebar header styles */
+.sidebar-header {
+    top: 60px;
+    padding: 85px;
+    display: flex;
+    justify-content: center; /* Center the date text */
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    position: relative; 
+    height: 50px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 16px;
+    margin: 0;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    color: #555;
+  }
+  
+  .close-button:hover {
+    color: #000;
+  }
+  
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .sidebar-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+  }
+  
+  .add-event {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Timeline layout */
+  .timeline {
+    position: relative;
+    display: flex;
+    height: 1440px; /* 24 hours * 60px per hour */
+  }
+  
+  .time-column {
+    width: 50px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    background-color: #f8f8f8;
+  }
+  
+  .hour-label {
+    height: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 12px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    padding-top: 2px;
+  }
+  
+  .events-area {
+    position: relative;
+    flex-grow: 1;
+  }
+  
+  .hour-guideline {
+    height: 60px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .current-time-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #f44336; /* Red */
+    z-index: 5;
+  }
+  
+  .event {
+    position: absolute;
+    padding: 5px;
+    border-radius: 4px;
+    color: #333;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    z-index: 3;
+    transition: box-shadow 0.2s;
+  }
+  
+  .event:hover {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+  
+  .event-title {
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .event-time {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  
+  .event-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    width: 80%;
+    z-index: 10;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .form-buttons button {
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .form-buttons button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+
+ /* Timeline layout fixes */
+.timeline {
+    position: relative;
+    display: flex;
+    height: 1440px; /* 24 hours * 60px per hour */
+  }
+  
+  .time-column {
+    width: 60px; /* Slightly wider to fit 24-hour format */
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    background-color: #f8f8f8;
+  }
+  
+  .events-area {
+    position: relative;
+    flex-grow: 1;
+    height: 1440px; /* Match the timeline height */
+  }
+  
+  /* Fix hour guidelines - these need to be absolutely positioned */
+  .hour-guideline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px; /* Thinner line */
+    background-color: #eee;
+    width: 100%;
+  }
+  
+  /* Position each hour guideline */
+  .hour-guideline:nth-child(1) { top: 0px; }
+  .hour-guideline:nth-child(2) { top: 60px; }
+  .hour-guideline:nth-child(3) { top: 120px; }
+  .hour-guideline:nth-child(4) { top: 180px; }
+  .hour-guideline:nth-child(5) { top: 240px; }
+  .hour-guideline:nth-child(6) { top: 300px; }
+  .hour-guideline:nth-child(7) { top: 360px; }
+  .hour-guideline:nth-child(8) { top: 420px; }
+  .hour-guideline:nth-child(9) { top: 480px; }
+  .hour-guideline:nth-child(10) { top: 540px; }
+  .hour-guideline:nth-child(11) { top: 600px; }
+  .hour-guideline:nth-child(12) { top: 660px; }
+  .hour-guideline:nth-child(13) { top: 720px; }
+  .hour-guideline:nth-child(14) { top: 780px; }
+  .hour-guideline:nth-child(15) { top: 840px; }
+  .hour-guideline:nth-child(16) { top: 900px; }
+  .hour-guideline:nth-child(17) { top: 960px; }
+  .hour-guideline:nth-child(18) { top: 1020px; }
+  .hour-guideline:nth-child(19) { top: 1080px; }
+  .hour-guideline:nth-child(20) { top: 1140px; }
+  .hour-guideline:nth-child(21) { top: 1200px; }
+  .hour-guideline:nth-child(22) { top: 1260px; }
+  .hour-guideline:nth-child(23) { top: 1320px; }
+  .hour-guideline:nth-child(24) { top: 1380px; }
+  
+  /* Updated event positioning */
+  .event {
+    position: absolute;
+    left: 0; /* Start from left edge of events area */
+    right: 5px; /* Leave small margin on right */
+    padding: 5px;
+    border-radius: 4px;
+    color: #333;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    z-index: 3;
+    transition: box-shadow 0.2s;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Make sure sidebar content scrolls properly */
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    position: relative;
+  }
+
+  
+/* Modal-specific styles */
+.event-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .event-modal {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+  }
+  
+  .event-modal h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 20px;
+  }
+  
+  .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  .form-time {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .form-time .form-group {
+    flex: 1;
+  }
+  
+  .btn-cancel {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+  
+  .btn-save {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+  
+  .btn-delete {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    margin-left: auto;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .btn-save:hover {
+    background-color: #3d8b40;
+  }
+  
+  .btn-delete:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Center the event title for better display */
+  .event-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+  }
+
+  /* Event form styling updates */
+.event-form {
+    display: none; /* Hide the old event form */
+  }
+  
+  /* Make sure events display properly */
+  .event {
+    position: absolute;
+    left: 0; /* Start from left edge of events area */
+    right: 5px; /* Leave small margin on right */
+    padding: 5px;
+    border-radius: 4px;
+    color: #333;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    z-index: 3;
+    transition: box-shadow 0.2s;
+    margin: 0;
+    box-sizing: border-box;
+  }
