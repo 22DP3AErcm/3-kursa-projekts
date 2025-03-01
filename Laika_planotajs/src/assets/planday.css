@@ -2,10 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ffffff; /* White background to stand out */
+    background-color: #363636; /* White background to stand out */
     padding: 40px; /* Increase padding */
     border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     max-width: 1200px; /* Increase the max width */
     margin: 60px auto; /* Center the calendar */
   }
@@ -13,6 +12,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    color: #fff;
     margin-bottom: 20px; /* Increase bottom margin */
   }
   .calendar-header span {
@@ -23,14 +23,14 @@
     padding: 10px 20px; /* Add padding */
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners */
-    background-color: #007bff; /* Blue background */
+    background-color: #000000; /* Blue background */
     color: #fff; /* White text */
     font-size: 1em; /* Font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s; /* Smooth transition */
   }
   .calendar-header button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #252525; /* Darker blue on hover */
   }
   .calendar-body {
     display: flex;
@@ -52,19 +52,14 @@
     align-items: center;
     justify-content: center;
     border: none; /* Remove default border */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #f0f0f0; /* Light grey background */
-    color: #000; /* Black text */
+    border-radius: 0; /* Remove rounded corners */
+    background-color: #363636; /* Light grey background */
+    color: #ffffff; /* Black text */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s; /* Smooth transition */
   }
   .calendar-days button:hover {
-    background-color: #d0d0d0; /* Darker grey on hover */
-  }
-  .current-day {
-    background-color: #ffeb3b; /* Highlight current day with a yellow background */
-    border-radius: 50%;
-    color: #000; /* Black text for contrast */
+    background-color: #4e4d4d; /* Darker grey on hover */
   }
   .sidebar {
     position: fixed;
@@ -72,9 +67,10 @@
     top: 0;
     width: 300px;
     height: 100%;
-    background-color: #ffffff;
+    background-color: #303030;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    color: #fff;
     overflow-y: auto;
     transition: transform 0.3s ease-in-out;
     transform: translateX(100%);
