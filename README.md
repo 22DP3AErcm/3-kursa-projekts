@@ -12,3 +12,6 @@ Kalendārs iesākts saglaba datus backenda bet ir jauztaisa atgadinajumu sistema
 Projektu plānotājs nav sākts
 Finanšu sekošanai lapa nav sākta
 Iestatijumi nav sākti
+
+
+Pievienots test fails Test.pdf
