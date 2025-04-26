@@ -7,6 +7,7 @@
             <button class="nav-button">{{ user.name }}</button>
             <div class="dropdown-content">
               <RouterLink to="/settings" class="dropdown-item">Settings</RouterLink>
+              <RouterLink to="/mail" class="dropdown-item">Mail</RouterLink>
               <button @click="logout" class="dropdown-item">Log Out</button>
             </div>
           </div>

@@ -88,6 +88,7 @@ main {
   min-width: 160px;
   z-index: 1;
   border-radius: 5px;
+  right: 0;
 }
 
 .dropdown:hover .dropdown-content {

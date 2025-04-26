@@ -4,6 +4,9 @@ import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import planday from '../views/plan-day.vue'
+import PlanProject from '../views/plan-project.vue'
+import ProjectDetail from '../views/ProjectDetail.vue'
+import MailView from '../views/MailView.vue'
 
 const routes = [
   {
@@ -30,6 +33,21 @@ const routes = [
     path: '/plan-day',
     name: 'plan-day',
     component: planday,
+  },
+  {
+    path: '/plan-project',
+    name: 'plan-project',
+    component: PlanProject,
+  },
+  {
+    path: '/projects/:id',
+    name: 'project-detail',
+    component: ProjectDetail,
+  },
+  {
+    path: '/mail',
+    name: 'mail',
+    component: MailView,
   },
 ]
 
