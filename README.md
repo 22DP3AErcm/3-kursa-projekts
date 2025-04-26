@@ -9,7 +9,7 @@ Login, register, logout pabeigts
 Home page iesākts projekta laikā plānots ka vēl mainīsies
 Navigation bar iesākts vēl mainīsies
 Kalendārs iesākts saglaba datus backenda bet ir jauztaisa atgadinajumu sistema
-Projektu plānotājs nav sākts
+Projektu plānotājs it pabeigts
 Finanšu sekošanai lapa nav sākta
 Iestatijumi nav sākti
 
