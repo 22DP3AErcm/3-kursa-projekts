@@ -9,6 +9,8 @@ use App\Http\Controllers\ProjectBlockController;
 use App\Http\Controllers\BlockItemController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\FinanceController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,17 +20,8 @@ Route::get('/', function () {
     return "Welcome";
 });
 
-Route::get('/register', function () {
-    return "Register";
-});
-
 Route::post("/register", [AuthController::class, "register"])->name("register");
-
 Route::post("/login", [AuthController::class, "login"])->name("login");
-
-Route::get('/logout', function () {
-    return "Logout";
-});
 
 Route::middleware('auth:sanctum')->group(function () {
     // Events routes
@@ -44,13 +37,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/projects/{project}', [ProjectController::class, 'update']);
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
     Route::post('/projects/{project}/invite', [ProjectController::class, 'inviteUser']);
+    Route::post('/projects/{project}/leave', [ProjectController::class, 'leaveProject']);
+    Route::get('/projects/{project}/members', [ProjectController::class, 'getMembers']);
     
     // Project blocks routes
     Route::post('/projects/{project}/blocks', [ProjectBlockController::class, 'store']);
     Route::put('/blocks/{block}', [ProjectBlockController::class, 'update']);
     Route::delete('/blocks/{block}', [ProjectBlockController::class, 'destroy']);
     Route::post('/projects/{project}/blocks/reorder', [ProjectBlockController::class, 'reorder']);
-    Route::post('/projects/{project}/leave', [ProjectController::class, 'leaveProject']);
     
     // Block items routes
     Route::post('/blocks/{block}/items', [BlockItemController::class, 'store']);
@@ -58,11 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/items/{item}', [BlockItemController::class, 'destroy']);
     Route::post('/items/{item}/move', [BlockItemController::class, 'moveItem']);
     Route::post('/blocks/{block}/items/reorder', [BlockItemController::class, 'reorder']);
-
-    // Add these new membership routes
-    Route::get('/projects/{project}/members', [ProjectController::class, 'getMembers']);
-    Route::post('/projects/{project}/invite', [ProjectController::class, 'inviteUser']); // You already have this
-    Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember']);
 
     // Mail routes
     Route::get('/messages', [MessageController::class, 'index']);
@@ -74,4 +63,34 @@ Route::middleware('auth:sanctum')->group(function () {
     // Invitations routes
     Route::get('/invitations', [InvitationController::class, 'index']);
     Route::post('/invitations/{invitation}/respond', [InvitationController::class, 'respond']);
+
+    
+    // User profile routes
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/user/password', [AuthController::class, 'updatePassword']);
+
+    // Finance routes - properly prefixed with /finance
+    Route::prefix('finance')->group(function () {
+        // Categories
+        Route::get('/categories', [FinanceController::class, 'getCategories']);
+        Route::post('/categories', [FinanceController::class, 'createCategory']);
+        Route::put('/categories/{category}', [FinanceController::class, 'updateCategory']);
+        Route::delete('/categories/{category}', [FinanceController::class, 'deleteCategory']);
+        
+        // Projects
+        Route::get('/projects', [FinanceController::class, 'getProjects']);
+        Route::post('/projects', [FinanceController::class, 'createProject']);
+        Route::get('/projects/{project}', [FinanceController::class, 'getProject']);
+        Route::put('/projects/{project}', [FinanceController::class, 'updateProject']);
+        Route::delete('/projects/{project}', [FinanceController::class, 'deleteProject']);
+        
+        // Transactions
+        Route::get('/transactions', [FinanceController::class, 'getTransactions']);
+        Route::post('/transactions', [FinanceController::class, 'createTransaction']);
+        Route::put('/transactions/{transaction}', [FinanceController::class, 'updateTransaction']);
+        Route::delete('/transactions/{transaction}', [FinanceController::class, 'deleteTransaction']);
+        
+        // Summary
+        Route::get('/summary', [FinanceController::class, 'getSummary']);
+    });
 });

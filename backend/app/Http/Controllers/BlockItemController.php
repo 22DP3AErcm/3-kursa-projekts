@@ -119,9 +119,9 @@ class BlockItemController extends Controller
             return response()->json(['message' => 'Viewers cannot modify project content'], 403);
         }
         
-        // Continue with existing logic...
         $request->validate([
             'target_block_id' => 'required|integer|exists:project_blocks,id',
+            'position' => 'nullable|integer|min:0',
         ]);
 
         $targetBlock = ProjectBlock::find($request->target_block_id);
@@ -131,13 +131,13 @@ class BlockItemController extends Controller
             return response()->json(['message' => 'Cannot move items between different projects'], 400);
         }
 
-        // Get the highest order in the target block
-        $maxOrder = $targetBlock->items()->max('order') ?? -1;
+        // Get the highest order in the target block if position not specified
+        $position = $request->position ?? $targetBlock->items()->max('order') + 1;
         
         // Update the item
         $item->update([
             'project_block_id' => $targetBlock->id,
-            'order' => $maxOrder + 1,
+            'order' => $position,
         ]);
 
         return response()->json(['message' => 'Item moved successfully']);

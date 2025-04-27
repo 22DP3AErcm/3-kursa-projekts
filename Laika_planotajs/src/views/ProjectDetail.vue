@@ -774,8 +774,8 @@ export default defineComponent({
       
       try {
         await axios.post(`http://localhost:8000/api/items/${itemId}/move`, {
-          block_id: blockId,
-          order: position
+          target_block_id: blockId, 
+          position: position  
         }, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -785,6 +785,10 @@ export default defineComponent({
         console.log('Move operation sent to server successfully');
       } catch (error) {
         console.error('Error moving item:', error);
+        if (error.response?.data?.errors) {
+          // Log validation errors for debugging
+          console.error('Validation errors:', error.response.data.errors);
+        }
         if (error.response?.status === 403) {
           alert('You do not have permission to modify this project.');
         }
@@ -803,15 +807,26 @@ export default defineComponent({
       }
       
       try {
+        // Format the items array with id and order properties
+        const items = itemIds.map((id, index) => ({
+          id: id,
+          order: index
+        }));
+        
         await axios.post(`http://localhost:8000/api/blocks/${blockId}/items/reorder`, {
-          items: itemIds
+          items: items  // Now sending the properly formatted array
         }, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+        
+        console.log('Items reordered successfully');
       } catch (error) {
         console.error('Error reordering items:', error);
+        if (error.response?.data?.errors) {
+          console.error('Validation errors:', error.response.data.errors);
+        }
         if (error.response?.status === 403) {
           alert('You do not have permission to modify this project.');
         }

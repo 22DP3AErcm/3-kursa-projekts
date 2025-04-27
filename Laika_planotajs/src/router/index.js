@@ -7,6 +7,9 @@ import planday from '../views/plan-day.vue'
 import PlanProject from '../views/plan-project.vue'
 import ProjectDetail from '../views/ProjectDetail.vue'
 import MailView from '../views/MailView.vue'
+import TrackFinances from '../views/track-finances.vue'
+import Graphs from '../views/Graphs.vue'
+import settings from '@/views/settings.vue'
 
 const routes = [
   {
@@ -49,6 +52,21 @@ const routes = [
     name: 'mail',
     component: MailView,
   },
+  {
+    path: '/track-finances',
+    name: 'track-finances',
+    component: TrackFinances,
+  },
+  {
+    path: '/finance/project/:id',
+    name: 'finance-project-detail',
+    component: Graphs,
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: settings,
+  }
 ]
 
 const router = createRouter({

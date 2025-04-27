@@ -29,7 +29,7 @@
 
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import '@/assets/styles.css';
 
 const router = useRouter();
@@ -42,10 +42,28 @@ const logout = async () => {
   window.location.reload();
 };
 
-onMounted(() => {
+// Function to update user data from localStorage
+const updateUserFromStorage = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
   if (storedUser) {
     user.value = storedUser;
   }
+};
+
+// Add event listener for user updates
+const handleUserUpdate = () => {
+  updateUserFromStorage();
+};
+
+onMounted(() => {
+  updateUserFromStorage();
+  
+  // Listen for user profile updates
+  window.addEventListener('user-updated', handleUserUpdate);
+});
+
+onUnmounted(() => {
+  // Clean up event listener
+  window.removeEventListener('user-updated', handleUserUpdate);
 });
 </script>

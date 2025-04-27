@@ -106,4 +106,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invitation::class, 'invitee_id');
     }
+
+    /**
+     * Get the finance projects owned by the user.
+     */
+    public function financeProjects(): HasMany
+    {
+        return $this->hasMany(FinanceProject::class);
+    }
+
+    /**
+     * Get the finance categories owned by the user.
+     */
+    public function financeCategories(): HasMany
+    {
+        return $this->hasMany(FinanceCategory::class);
+    }
+
+    /**
+     * Get the transactions owned by the user.
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
