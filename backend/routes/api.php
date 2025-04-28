@@ -10,7 +10,7 @@ use App\Http\Controllers\BlockItemController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FinanceController;
-
+use App\Http\Controllers\ReminderController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -20,16 +20,43 @@ Route::get('/', function () {
     return "Welcome";
 });
 
+Route::get('/test-email', [TestController::class, 'testEmail']);
+
 Route::post("/register", [AuthController::class, "register"])->name("register");
 Route::post("/login", [AuthController::class, "login"])->name("login");
+
+Route::get('/api/test-reminder/{eventId}/{minutes?}', function($eventId, $minutes = 2) {
+    \Log::info("Creating test reminder for event {$eventId} to trigger in {$minutes} minutes");
+    
+    $service = app(\App\Services\ReminderService::class);
+    $reminder = $service->createTestReminder($eventId, $minutes);
+    
+    if ($reminder) {
+        \Log::info("Test reminder created successfully with ID {$reminder->id}");
+        return response()->json([
+            'success' => true,
+            'message' => "Test reminder created. Will trigger in {$minutes} minutes.",
+            'reminder_id' => $reminder->id,
+            'remind_at' => $reminder->remind_at
+        ]);
+    } else {
+        \Log::error("Failed to create test reminder");
+        return response()->json([
+            'success' => false,
+            'message' => "Failed to create test reminder"
+        ], 500);
+    }
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     // Events routes
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/month', [EventController::class, 'getMonthEvents']);
+    Route::get('/events/{event}', [EventController::class, 'show']); 
     Route::post('/events', [EventController::class, 'store']);
     Route::put('/events/{event}', [EventController::class, 'update']);
     Route::delete('/events/{event}', [EventController::class, 'destroy']);
-    
+        
     // Projects routes
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::post('/projects', [ProjectController::class, 'store']);
@@ -68,6 +95,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // User profile routes
     Route::put('/user/profile', [AuthController::class, 'updateProfile']);
     Route::put('/user/password', [AuthController::class, 'updatePassword']);
+
+    // Then add these routes inside the middleware group
+    Route::get('/events/{event}/reminders', [ReminderController::class, 'getForEvent']);
+    Route::post('/events/{event}/reminders', [ReminderController::class, 'store']);
+    Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy']);
 
     // Finance routes - properly prefixed with /finance
     Route::prefix('finance')->group(function () {

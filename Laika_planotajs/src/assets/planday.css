@@ -2,35 +2,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #363636; /* White background to stand out */
-    padding: 40px; /* Increase padding */
-    border-radius: 10px; /* Rounded corners */
-    max-width: 1200px; /* Increase the max width */
-    margin: 60px auto; /* Center the calendar */
+    background-color: #363636;
+    padding: 40px; 
+    border-radius: 10px;
+    max-width: 1200px; 
+    margin: 60px auto; 
   }
   .calendar-header {
     display: flex;
     justify-content: space-between;
     width: 100%;
     color: #fff;
-    margin-bottom: 20px; /* Increase bottom margin */
+    margin-bottom: 20px;
   }
   .calendar-header span {
-    font-size: 1.5em; /* Increase font size */
-    font-weight: bold; /* Make text bold */
+    font-size: 1.5em; 
+    font-weight: bold; 
   }
   .calendar-header button {
-    padding: 10px 20px; /* Add padding */
-    border: none; /* Remove default border */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #000000; /* Blue background */
-    color: #fff; /* White text */
-    font-size: 1em; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth transition */
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 5px;
+    background-color: #000000; 
+    color: #fff;
+    font-size: 1em; 
+    cursor: pointer; 
+    transition: background-color 0.3s;
   }
   .calendar-header button:hover {
-    background-color: #252525; /* Darker blue on hover */
+    background-color: #252525;
   }
   .calendar-body {
     display: flex;
@@ -45,21 +45,21 @@
   .calendar-weekdays div, .calendar-days button {
     width: calc(100% / 7);
     text-align: center;
-    padding: 20px; /* Increase padding */
-    font-size: 1.5em; /* Increase font size */
-    height: 60px; /* Increase height */
+    padding: 20px;
+    font-size: 1.5em;
+    height: 60px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none; /* Remove default border */
-    border-radius: 0; /* Remove rounded corners */
-    background-color: #363636; /* Light grey background */
-    color: #ffffff; /* Black text */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth transition */
+    border: none; 
+    border-radius: 0; 
+    background-color: #363636; 
+    color: #ffffff; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
   }
   .calendar-days button:hover {
-    background-color: #4e4d4d; /* Darker grey on hover */
+    background-color: #4e4d4d;
   }
   .sidebar {
     position: fixed;
@@ -78,3 +78,48 @@
   .sidebar.open {
     transform: translateX(0);
   }
+
+.has-reminders .reminder-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  background-color: #ff5722;
+  border-radius: 50%;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.error-message {
+  color: #d32f2f;
+  text-align: center;
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.plan-day-container {
+  position: relative;
+}
+
+.calendar-day {
+  position: relative;
+}
+
+.event-indicator {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #4caf50;
+  border-radius: 50%;
+}
