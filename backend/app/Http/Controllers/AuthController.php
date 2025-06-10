@@ -55,9 +55,9 @@ class AuthController extends Controller
         $user = $request->user();
         
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s\-\']+$/',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'telephone' => 'nullable|string|max:20',
+            'telephone' => 'nullable|string|max:20|regex:/^[+]?[\d\s\-\(\)]{8,20}$/',
         ]);
         
         $user->update($validated);
@@ -75,7 +75,13 @@ class AuthController extends Controller
     {
         $request->validate([
             'current_password' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
         ]);
         
         $user = $request->user();

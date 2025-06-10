@@ -174,6 +174,7 @@ export default {
       currentTime: new Date(),
       showAddEventForm: false,
       editingEvent: null,
+      isProcessingEvent: false,
       eventForm: {
         title: '',
         description: '',
@@ -445,204 +446,228 @@ export default {
     },
     
     async saveEvent() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('You need to be logged in to save events');
+      // Add processing flag to prevent duplicate submissions
+      if (this.isProcessingEvent) {
+        console.log('Event submission already in progress, preventing duplicate');
         return;
       }
-
-      // FIX: Check for empty event reminders and prepare them properly
-      const cleanReminders = this.prepareReminders();
-      console.log('Prepared reminders:', cleanReminders);
-
-      if (this.editingEvent) {
-        try {
-          // Extract date part from original event
-          let originalDatePart = this.selectedDate;
-          if (this.editingEvent.start_time && this.editingEvent.start_time.includes(' ')) {
-            originalDatePart = this.editingEvent.start_time.split(' ')[0];
-          }
-          
-          // SIMPLIFIED VERSION: Only include required fields for update
-          const updatedEvent = {
-            title: this.eventForm.title,
-            description: this.eventForm.description,
-            start_time: `${originalDatePart} ${this.eventForm.startTime}:00`,
-            end_time: `${originalDatePart} ${this.eventForm.endTime}:00`
-          };
-          
-          console.log('Sending update with data:', updatedEvent);
-          
-          // First delete existing reminders
-          if (this.editingEvent.reminders && this.editingEvent.reminders.length > 0) {
-            for (const reminder of this.editingEvent.reminders) {
-              await axios.delete(
-                `http://localhost:8000/api/reminders/${reminder.id}`,
-                { headers: { 'Authorization': `Bearer ${token}` } }
-              );
-            }
-          }
-          
-          // Update the event with proper error handling
-          const response = await axios.put(
-            `http://localhost:8000/api/events/${this.editingEvent.id}`,
-            updatedEvent,
-            { headers: { 'Authorization': `Bearer ${token}` } }
-          );
-          
-          // Get the updated event with its new times
-          const updatedEventData = response.data;
-          
-          // Debug reminders array before processing
-          console.log('Reminders to be added:', JSON.stringify(cleanReminders));
-          
-          // Now add the new reminders for the updated event
-          const newReminders = [];
-          
-          // Process each reminder with improved validation
-          for (const reminder of cleanReminders) {
-            // Skip invalid reminders
-            if (!reminder.minutes_before || isNaN(reminder.minutes_before) || reminder.minutes_before <= 0) {
-              console.warn('Skipping invalid reminder:', reminder);
-              continue;
-            }
-            
-            console.log('Creating reminder with data:', { 
-              type: reminder.type, 
-              minutes_before: reminder.minutes_before 
-            });
-            
-            try {
-              const reminderResponse = await axios.post(
-                `http://localhost:8000/api/events/${this.editingEvent.id}/reminders`,
-                {
-                  type: reminder.type,
-                  minutes_before: reminder.minutes_before
-                },
-                { headers: { 'Authorization': `Bearer ${token}` } }
-              );
-              
-              console.log('Reminder created successfully:', reminderResponse.data);
-              newReminders.push(reminderResponse.data);
-            } catch (reminderError) {
-              console.error('Failed to create reminder:', reminderError);
-              if (reminderError.response && reminderError.response.data) {
-                console.error('Reminder validation error:', reminderError.response.data);
-              }
-              // Continue with other reminders
-            }
-          }
-          
-          // Create complete event with new reminders
-          const updatedEventWithReminders = {
-            ...updatedEventData,
-            reminders: newReminders
-          };
-          
-          console.log('Updated event with reminders:', updatedEventWithReminders);
-          
-          // FIX: Only emit one update event to avoid duplication
-          this.$emit('update-event', updatedEventWithReminders);
-          
-        } catch (error) {
-          console.error('Error updating event:', error);
-          if (error.response && error.response.data) {
-            console.error('Validation errors:', error.response.data);
-            if (error.response.data.errors) {
-              const errorMessages = Object.values(error.response.data.errors).flat().join('\n');
-              alert(`Update failed: ${errorMessages}`);
-            } else {
-              alert(`Update failed: ${error.response.data.message || 'Unknown error'}`);
-            }
-          } else {
-            alert('Error updating event. Please check your connection and try again.');
-          }
-        }
-      } else {
-        // Fixed: Create new event implementation
-        try {
-          const user = JSON.parse(localStorage.getItem('user'));
-          
-          if (!user) {
-            alert('User information not found. Please log in again.');
-            return;
-          }
-          
-          // Create new event
-          const newEvent = {
-            title: this.eventForm.title,
-            description: this.eventForm.description,
-            start_time: `${this.selectedDate} ${this.eventForm.startTime}:00`,
-            end_time: `${this.selectedDate} ${this.eventForm.endTime}:00`
-          };
-          
-          console.log('Creating new event:', newEvent);
-          
-          // Create the event
-          const response = await axios.post(
-            'http://localhost:8000/api/events',
-            newEvent,
-            { headers: { 'Authorization': `Bearer ${token}` } }
-          );
-          
-          const createdEvent = response.data;
-          console.log('Event created:', createdEvent);
-          
-          // Now add reminders
-          const newReminders = [];
-          
-          for (const reminder of cleanReminders) {
-            // Skip invalid reminders
-            if (!reminder.minutes_before || isNaN(reminder.minutes_before)) {
-              console.warn('Skipping invalid reminder:', reminder);
-              continue;
-            }
-            
-            try {
-              const reminderResponse = await axios.post(
-                `http://localhost:8000/api/events/${createdEvent.id}/reminders`,
-                {
-                  type: reminder.type,
-                  minutes_before: reminder.minutes_before
-                },
-                { headers: { 'Authorization': `Bearer ${token}` } }
-              );
-              
-              newReminders.push(reminderResponse.data);
-            } catch (error) {
-              console.error('Failed to create reminder:', error);
-            }
-          }
-          
-          // Create complete event with reminders
-          const eventWithReminders = {
-            ...createdEvent,
-            reminders: newReminders
-          };
-          
-          console.log('Event created with reminders:', eventWithReminders);
-          
-          // FIX: Use a one-time flag to prevent duplicate emission
-          this.$emit('add-event', eventWithReminders);
-          
-        } catch (error) {
-          console.error('Error creating event:', error);
-          
-          if (error.response && error.response.data) {
-            console.error('Validation errors:', error.response.data);
-            if (error.response.data.errors) {
-              const errorMessages = Object.values(error.response.data.errors).flat().join('\n');
-              alert(`Create failed: ${errorMessages}`);
-            } else {
-              alert(`Create failed: ${error.response.data.message || 'Unknown error'}`);
-            }
-          } else {
-            alert('Error creating event. Please check your connection and try again.');
-          }
-        }
-      }
       
-      this.cancelEdit();
+      this.isProcessingEvent = true;
+      
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('You need to be logged in to save events');
+          return;
+        }
+    
+        // FIX: Check for empty event reminders and prepare them properly
+        const cleanReminders = this.prepareReminders();
+        console.log('Prepared reminders:', cleanReminders);
+    
+        // Validate that end time is after start time
+        const startTime = new Date(`2000-01-01T${this.eventForm.startTime}`);
+        const endTime = new Date(`2000-01-01T${this.eventForm.endTime}`);
+        if (endTime <= startTime) {
+          alert('End time must be after start time');
+          return;
+        }
+    
+        // Get user information
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          alert('User information not found. Please log in again.');
+          return;
+        }
+    
+        if (this.editingEvent) {
+          try {
+            // Extract date part from original event
+            let originalDatePart = this.selectedDate;
+            if (this.editingEvent.start_time && this.editingEvent.start_time.includes(' ')) {
+              originalDatePart = this.editingEvent.start_time.split(' ')[0];
+            }
+            
+            // FIXED: Include user_id in the event payload
+            const updatedEvent = {
+              user_id: user.id,
+              title: this.eventForm.title,
+              description: this.eventForm.description,
+              start_time: `${originalDatePart} ${this.eventForm.startTime}:00`,
+              end_time: `${originalDatePart} ${this.eventForm.endTime}:00`
+            };
+            
+            console.log('Sending update with data:', updatedEvent);
+            
+            // First delete existing reminders
+            if (this.editingEvent.reminders && this.editingEvent.reminders.length > 0) {
+              for (const reminder of this.editingEvent.reminders) {
+                await axios.delete(
+                  `http://localhost:8000/api/reminders/${reminder.id}`,
+                  { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+              }
+            }
+            
+            // Update the event with proper error handling
+            const response = await axios.put(
+              `http://localhost:8000/api/events/${this.editingEvent.id}`,
+              updatedEvent,
+              { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            
+            // Get the updated event with its new times
+            const updatedEventData = response.data;
+            
+            // Debug reminders array before processing
+            console.log('Reminders to be added:', JSON.stringify(cleanReminders));
+            
+            // Now add the new reminders for the updated event
+            const newReminders = [];
+            
+            // Process each reminder with improved validation
+            for (const reminder of cleanReminders) {
+              // Skip invalid reminders
+              if (!reminder.minutes_before || isNaN(reminder.minutes_before) || reminder.minutes_before <= 0) {
+                console.warn('Skipping invalid reminder:', reminder);
+                continue;
+              }
+              
+              console.log('Creating reminder with data:', { 
+                type: reminder.type, 
+                minutes_before: reminder.minutes_before 
+              });
+              
+              try {
+                const reminderResponse = await axios.post(
+                  `http://localhost:8000/api/events/${this.editingEvent.id}/reminders`,
+                  {
+                    type: reminder.type,
+                    minutes_before: reminder.minutes_before
+                  },
+                  { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                
+                console.log('Reminder created successfully:', reminderResponse.data);
+                newReminders.push(reminderResponse.data);
+              } catch (reminderError) {
+                console.error('Failed to create reminder:', reminderError);
+                if (reminderError.response && reminderError.response.data) {
+                  console.error('Reminder validation error:', reminderError.response.data);
+                }
+                // Continue with other reminders
+              }
+            }
+            
+            // Create complete event with new reminders
+            const updatedEventWithReminders = {
+              ...updatedEventData,
+              reminders: newReminders
+            };
+            
+            console.log('Updated event with reminders:', updatedEventWithReminders);
+            
+            // FIX: Only emit one update event to avoid duplication
+            this.$emit('update-event', updatedEventWithReminders);
+            
+          } catch (error) {
+            console.error('Error updating event:', error);
+            if (error.response && error.response.data) {
+              console.error('Validation errors:', error.response.data);
+              if (error.response.data.errors) {
+                const errorMessages = Object.values(error.response.data.errors).flat().join('\n');
+                alert(`Update failed: ${errorMessages}`);
+              } else {
+                alert(`Update failed: ${error.response.data.message || 'Unknown error'}`);
+              }
+            } else {
+              alert('Error updating event. Please check your connection and try again.');
+            }
+          }
+        } else {
+          // Fixed: Create new event implementation
+          try {
+            // Create new event
+            const newEvent = {
+              user_id: user.id,
+              title: this.eventForm.title,
+              description: this.eventForm.description,
+              start_time: `${this.selectedDate} ${this.eventForm.startTime}:00`,
+              end_time: `${this.selectedDate} ${this.eventForm.endTime}:00`
+            };
+            
+            console.log('Creating new event:', newEvent);
+            
+            // Create the event
+            const response = await axios.post(
+              'http://localhost:8000/api/events',
+              newEvent,
+              { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            
+            const createdEvent = response.data;
+            console.log('Event created:', createdEvent);
+            
+            // Now add reminders
+            const newReminders = [];
+            
+            for (const reminder of cleanReminders) {
+              // Skip invalid reminders
+              if (!reminder.minutes_before || isNaN(reminder.minutes_before)) {
+                console.warn('Skipping invalid reminder:', reminder);
+                continue;
+              }
+              
+              try {
+                const reminderResponse = await axios.post(
+                  `http://localhost:8000/api/events/${createdEvent.id}/reminders`,
+                  {
+                    type: reminder.type,
+                    minutes_before: reminder.minutes_before
+                  },
+                  { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                
+                newReminders.push(reminderResponse.data);
+              } catch (error) {
+                console.error('Failed to create reminder:', error);
+              }
+            }
+            
+            // Create complete event with reminders
+            const eventWithReminders = {
+              ...createdEvent,
+              reminders: newReminders
+            };
+            
+            console.log('Event created with reminders:', eventWithReminders);
+            
+            // FIX: Use a one-time flag to prevent duplicate emission
+            this.$emit('add-event', eventWithReminders);
+            
+          } catch (error) {
+            console.error('Error creating event:', error);
+            
+            if (error.response && error.response.data) {
+              console.error('Validation errors:', error.response.data);
+              if (error.response.data.errors) {
+                const errorMessages = Object.values(error.response.data.errors).flat().join('\n');
+                alert(`Create failed: ${errorMessages}`);
+              } else {
+                alert(`Create failed: ${error.response.data.message || 'Unknown error'}`);
+              }
+            } else {
+              alert('Error creating event. Please check your connection and try again.');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error in event processing:', error);
+      } finally {
+        // Reset the processing flag regardless of success or failure
+        this.isProcessingEvent = false;
+        this.cancelEdit();
+      }
     },
     
     deleteEvent() {

@@ -328,7 +328,7 @@
     flex-direction: column;
     min-height: calc(100vh - 70px);
     background-color: #222;
-    padding-top: 700px;
+    padding-top: 400px;
   }
   
   .settings-header {

@@ -10,6 +10,7 @@ import MailView from '../views/MailView.vue'
 import TrackFinances from '../views/track-finances.vue'
 import Graphs from '../views/Graphs.vue'
 import settings from '@/views/settings.vue'
+import AdminPage from '@/views/adminPage.vue'
 
 const routes = [
   {
@@ -66,6 +67,19 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: settings,
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminPage,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem('user'))
+      if (user && user.is_admin) {
+        next()
+      } else {
+        next({ name: 'home' })
+      }
+    }
   }
 ]
 

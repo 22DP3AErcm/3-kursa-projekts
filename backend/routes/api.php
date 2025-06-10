@@ -11,6 +11,8 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\EnsureUserIsAdmin;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -125,4 +127,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // Summary
         Route::get('/summary', [FinanceController::class, 'getSummary']);
     });
-});
+
+    Route::middleware(['auth:sanctum', \App\Http\Middleware\EnsureUserIsAdmin::class])
+        ->prefix('admin')
+        ->group(function () {
+            Route::get('/users', [AdminController::class, 'getUsers']);
+            Route::get('/user-activity', [AdminController::class, 'getUserActivity']);
+            Route::put('/users/{user}', [AdminController::class, 'updateUser']);
+            Route::delete('/users/{user}', [AdminController::class, 'deleteUser']);
+            Route::get('/stats', [AdminController::class, 'getStats']);
+        });
+    });

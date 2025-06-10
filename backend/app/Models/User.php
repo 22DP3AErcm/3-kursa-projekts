@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'telephone',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -56,6 +57,11 @@ class User extends Authenticatable
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
     }
 
     /**
